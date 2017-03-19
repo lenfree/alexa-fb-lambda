@@ -1,0 +1,10 @@
+{
+    "dependencies": {
+        "github.com/eawsy/aws-lambda-go-core": {
+            "branch": "master"
+        },
+        "github.com/huandu/facebook": {
+            "branch": "master"
+        }
+    }
+}

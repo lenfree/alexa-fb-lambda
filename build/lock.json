@@ -1,0 +1,21 @@
+{
+    "memo": "42b15d8857a5311900b70cd75ac0e2c7f4cb88fb1c72c7bbab7358c4c1f96c3b",
+    "projects": [
+        {
+            "name": "github.com/eawsy/aws-lambda-go-core",
+            "branch": "master",
+            "revision": "e26eed6aa244a3d45aa693816a9c5faf39390fcd",
+            "packages": [
+                "service/lambda/runtime"
+            ]
+        },
+        {
+            "name": "github.com/huandu/facebook",
+            "branch": "master",
+            "revision": "efe962f32209aa6e7430fb779bdf29bbcdb716e1",
+            "packages": [
+                "."
+            ]
+        }
+    ]
+}
