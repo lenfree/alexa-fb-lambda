@@ -34,10 +34,10 @@ func init() {
 
 func myFacebookCall(echoReq *echoEvt) *alexaResponse {
 	s := new(echoReq.Session.User.AccessToken)
-	total, unreadMsgFrom := unreadMsg(s)
+	count, unreadMsgFrom := unreadMsg(s)
 	var speechText string
-	if total > 0 {
-		speechText = "You have " + strconv.Itoa(total) + " of unread messages. From " + strings.Join(unreadMsgFrom, "... ")
+	if count > 0 {
+		speechText = "You have " + strconv.Itoa(count) + " of unread messages. From " + strings.Join(unreadMsgFrom, "... ")
 	} else {
 		speechText = "You have 0 unread message."
 	}
@@ -63,23 +63,24 @@ func new(token string) *fb.Session {
 
 func unreadMsg(s *fb.Session) (int, []string) {
 	res, err := s.Get("/me", fb.Params{
-		"fields": "inbox{from,message,subject,updated_time,to,unread,unseen,id}",
+		"fields": "inbox{from,message,subject,updated_time,to,unread,unseen,id,comments}",
 	})
 	if err != nil {
 		log.Printf("error: %s\n", err.Error())
 	}
 
-	var m messages
-	res.Decode(&m)
-	var total int
-	var unReadMsgs []string
-	for _, msg := range m.Inbox.Data {
+	var i inbox
+	res.Decode(&i)
+	var unReadMsgCount []string
+	for _, msg := range i.Inbox.Data {
 		if msg.Unread > 0 {
-			from := msg.To.Data[0].Name
-			unReadMsgs = append(unReadMsgs, from)
-			total++
-
+			var comments []string
+			for i := len(msg.Comments.Data); i > (len(msg.Comments.Data) - msg.Unread); i-- {
+				comments = append(comments, msg.Comments.Data[i-1].Message)
+			}
+			from := msg.To.Data[0].Name + "..." + "message" + "..." + strings.Join(comments, "...")
+			unReadMsgCount = append(unReadMsgCount, from)
 		}
 	}
-	return total, unReadMsgs
+	return i.Inbox.Summary.UnreadCount, unReadMsgCount
 }

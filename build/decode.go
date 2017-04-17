@@ -48,10 +48,25 @@ type alexaResponse struct {
 	} `json:"sessionAttributes,omitempty"`
 }
 
-type messages struct {
+type inbox struct {
 	ID    string `json:"id"`
 	Inbox struct {
 		Data []struct {
+			Comments struct {
+				Data []struct {
+					CreatedTime string `json:"created_time"`
+					From        struct {
+						ID   string `json:"id"`
+						Name string `json:"name"`
+					} `json:"from"`
+					ID      string `json:"id"`
+					Message string `json:"message"`
+				} `json:"data"`
+				Paging struct {
+					Next     string `json:"next"`
+					Previous string `json:"previous"`
+				} `json:"paging"`
+			} `json:"comments"`
 			ID string `json:"id"`
 			To struct {
 				Data []struct {
